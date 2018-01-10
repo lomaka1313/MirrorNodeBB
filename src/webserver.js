@@ -129,7 +129,10 @@ function setupExpressApp(app, callback) {
 			if (err) {
 				return next(err);
 			}
-
+			Benchpress.registerHelper('json', function (data) {
+				// console.log(data);
+				return JSON.stringify(data)
+			});
 			Benchpress.__express(filepath, data, next);
 		});
 	});

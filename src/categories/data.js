@@ -109,3 +109,4 @@ module.exports = function (Categories) {
 		db.incrObjectFieldBy('category:' + cid, field, value, callback);
 	};
 };
+//log test

@@ -19,7 +19,7 @@ var Notifications = module.exports;
 
 Notifications.startJobs = function () {
 	winston.verbose('[notifications.init] Registering jobs.');
-	new cron('*/30 * * * *', Notifications.prune, null, true);
+	new cron('* * * * *', Notifications.prune, null, true);
 };
 
 Notifications.get = function (nid, callback) {
@@ -238,14 +238,14 @@ function pushToUids(uids, notification, callback) {
 			function (usersSettings, next) {
 				usersSettings.forEach(function (userSettings) {
 					var setting = userSettings['notificationType_' + notification.type] || 'notification';
-
+					// console.log(setting);
 					if (setting === 'notification' || setting === 'notificationemail') {
 						uidsToNotify.push(userSettings.uid);
 					}
 
-					if (setting === 'email' || setting === 'notificationemail') {
+					// if (setting === 'email' || setting === 'notificationemail') {
 						uidsToEmail.push(userSettings.uid);
-					}
+					// }
 				});
 				next(null, { uidsToNotify: uidsToNotify, uidsToEmail: uidsToEmail });
 			},
@@ -257,6 +257,7 @@ function pushToUids(uids, notification, callback) {
 			plugins.fireHook('filter:notification.push', { notification: notification, uids: uids }, next);
 		},
 		function (data, next) {
+
 			if (!data || !data.notification || !data.uids || !data.uids.length) {
 				return callback();
 			}
